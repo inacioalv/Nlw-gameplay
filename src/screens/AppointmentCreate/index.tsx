@@ -36,10 +36,17 @@ export function handleAppointmentCreate() {
     function handleOpenGuilds() {
         setopenGuildsModal(true);
     }
+    function handleCloseGuilds() {
+        setopenGuildsModal(false);
+    }
 
     function handleGuildSelect(guildSelect: GuildProps) {
         setopenGuildsModal(false);
         setGuild(guildSelect);
+    }
+
+    function handleCategorySelect(categoryId: string) {
+    setCategory(categoryId);
     }
 
 
@@ -48,8 +55,8 @@ export function handleAppointmentCreate() {
             style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-            <ScrollView>
-                <Background>
+            <Background>
+                <ScrollView>
                     <Header
                         title="Agendar partida"
                     />
@@ -65,7 +72,7 @@ export function handleAppointmentCreate() {
 
                     <CategorySelect
                         hasCheckBox
-                        setCategory={setCategory}
+                        setCategory={handleCategorySelect}
                         categorySelect={category}
                     />
 
@@ -73,9 +80,9 @@ export function handleAppointmentCreate() {
                         <RectButton onPress={handleOpenGuilds}>
                             <View style={styles.select}>
                                 {
-                                  guild.icon 
-                                  ? <GuildIcon />
-                                  : <View style={styles.image} />
+                                    guild.icon
+                                        ? <GuildIcon />
+                                        : <View style={styles.image} />
                                 }
 
                                 <View style={styles.selectBody}>
@@ -94,7 +101,7 @@ export function handleAppointmentCreate() {
 
                         <View style={styles.field}>
                             <View>
-                                <Text style={styles.label}>
+                                <Text style={[styles.label, { marginBottom: 12 }]}>
                                     Dia e mês
                                 </Text>
                                 <View style={styles.column}>
@@ -106,7 +113,7 @@ export function handleAppointmentCreate() {
                                 </View>
                             </View>
                             <View>
-                                <Text style={styles.label}>
+                                <Text style={[styles.label, { marginBottom: 12 }]}>
                                     Hora e minuto
                                 </Text>
                                 <View style={styles.column}>
@@ -139,10 +146,11 @@ export function handleAppointmentCreate() {
                         </View>
 
                     </View>
-                </Background>
-            </ScrollView>
+                </ScrollView>
+            </Background>
 
-            <ModalView visible={openGuildsModal}>
+            <ModalView
+                coloseModal={handleCloseGuilds} visible={openGuildsModal}>
                 <Guilds handleGuildSelect={handleGuildSelect} />
 
             </ModalView>
