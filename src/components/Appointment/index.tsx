@@ -19,7 +19,7 @@ export type AppointmentProps = {
     category: string;
     date: string;
     description: string;
-}
+  }
 
 type Props = RectButtonProps & {
     data: AppointmentProps;
@@ -27,7 +27,7 @@ type Props = RectButtonProps & {
 
 export function Appointment({ data, ...rest }: Props) {
     const [category] = categories.filter(item => item.id === data.category);
-    const { owner, name } = data.guild;
+    const { owner, name,id,icon } = data.guild;
     const { primary, on,secondary50, secondary70} = theme.colors;
 
     return (
@@ -37,7 +37,7 @@ export function Appointment({ data, ...rest }: Props) {
                     style={styles.guildIconContainer}
                     colors={[secondary50, secondary70]}
                 >
-                <GuildIcon />
+                <GuildIcon guildId={id} iconId={icon} />
                 </LinearGradient>
                 <View style={styles.content}>
                     <View style={styles.header}>

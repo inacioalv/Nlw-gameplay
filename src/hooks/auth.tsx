@@ -15,6 +15,8 @@ const { REDIRECT_URI, } = process.env;
 const { RESPONSE_TYPE, } = process.env;
 
 import { api } from "../services/api";
+import { COLLECTION_USERS } from "../configs/database";
+import { useEffect } from "react";
 
 type User = {
     id: string;
@@ -27,6 +29,7 @@ type User = {
 type AuthContextData = {
     user: User;
     singIn: () => Promise<void>;
+    singOut: () => Promise<void>;
     loading: boolean;
 }
 
@@ -65,14 +68,14 @@ function AuthProvider({ children }: AuthProviderProps) {
 
                 userInfo.data.avatar = `${CDN_IMAGE}/avatars/${userInfo.data.id}/${userInfo.data.avatar}.png`;
 
-                //Armazenar o login no local Storage
-                // await AsyncStorage.setItem()
-                setUser({
+                const userData = {
                     ...userInfo.data,
                     firstName,
                     token: params.access_token
-                });
-
+                }
+                //Armazenar o login no local Storage
+                await AsyncStorage.setItem(COLLECTION_USERS, JSON.stringify(userData));
+                setUser(userData);
 
             }
         } catch {
@@ -82,11 +85,33 @@ function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
+    async function singOut(){
+        setUser({} as User);
+        await AsyncStorage.removeItem(COLLECTION_USERS);
+    }
+
+   async function loadUserStorageData() {
+        const storage = await AsyncStorage.getItem(COLLECTION_USERS);
+        if(storage){
+            const userLogged = JSON.parse(storage) as User;
+
+            api.defaults.headers.authorization = `Bearer ${userLogged.token}`;
+
+            setUser(userLogged);
+
+        }
+    }
+
+    useEffect(()=>{
+        loadUserStorageData();
+    },[]);
+
     return (
         <AuthContext.Provider value={{
             user,
             singIn,
-            loading
+            loading,
+            singOut
         }}>
             {children}
         </AuthContext.Provider>
