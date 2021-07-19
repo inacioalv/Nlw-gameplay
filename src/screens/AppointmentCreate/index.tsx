@@ -6,7 +6,8 @@ import {
     View,
     ScrollView,
     Platform,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Alert
 } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import uuid from 'react-native-uuid'
@@ -25,7 +26,7 @@ import { ModalView } from '../../components/ModalView'
 import { Guilds } from "../Guilds";
 import { GuildProps } from "../../components/Guild";
 
-import { styles } from './styles'
+import {styles } from './styles'
 import { theme } from "../../global/styles/theme";
 
 export function handleAppointmentCreate() {
@@ -33,12 +34,14 @@ export function handleAppointmentCreate() {
     const [category, setCategory] = useState('');
     const [openGuildsModal, setopenGuildsModal] = useState(false);
     const [guild, setGuild] = useState<GuildProps>({} as GuildProps);
+    const [inputError, setInputError] = useState('');
 
     const [day, setDay] = useState('')
     const [month, setMonth] = useState('')
     const [hour, setHour] = useState('')
     const [minute, setMinute] = useState('')
     const [description, setDescription] = useState('')
+
 
     const navigation = useNavigation();
 
@@ -59,6 +62,32 @@ export function handleAppointmentCreate() {
     }
 
     async function handleSave() {
+        if (!day) {
+            setInputError('Informe o dia');
+            return;
+        }
+        if (!month) {
+            setInputError('Informe o Mês');
+            return;
+        }
+        if (!hour) {
+            setInputError('Informe a hora');
+            return;
+        }
+        if (!minute) {
+            setInputError('Informe o minuto');
+            return;
+        }
+        if (!category) {
+            setInputError('Informe a categoria');
+            return;
+        }
+        if (!description) {
+            setInputError('Informe a descrição');
+            return;
+        }
+    
+
         const newAppointment = {
             id: uuid.v4(),
             guild,
@@ -74,7 +103,6 @@ export function handleAppointmentCreate() {
             COLLECTION_APPOINTMENTS,
             JSON.stringify([...appointments, newAppointment])
         );
-
         navigation.navigate('Home');
     }
 
@@ -140,6 +168,7 @@ export function handleAppointmentCreate() {
 
                                     <SmallInput
                                         maxLength={2}
+                                        name="day"
                                         onChangeText={setDay}
                                     />
 
@@ -149,6 +178,7 @@ export function handleAppointmentCreate() {
 
                                     <SmallInput
                                         maxLength={2}
+                                        name="month"
                                         onChangeText={setMonth} />
 
                                 </View>
@@ -163,6 +193,7 @@ export function handleAppointmentCreate() {
 
                                     <SmallInput
                                         maxLength={2}
+                                        name="hour"
                                         onChangeText={setHour} />
 
                                     <Text style={styles.divider}>
@@ -170,6 +201,7 @@ export function handleAppointmentCreate() {
                                     </Text>
                                     <SmallInput
                                         maxLength={2}
+                                        name="minute"
                                         onChangeText={setMinute} />
                                 </View>
 
@@ -194,12 +226,14 @@ export function handleAppointmentCreate() {
                         />
 
                         <View style={styles.footer}>
-                            <Button 
+                            <Button
                                 title="Agendar"
                                 onPress={handleSave}
                             />
                         </View>
 
+                        {<Text>{inputError}</Text>}
+                        
                     </View>
                 </ScrollView>
             </Background>

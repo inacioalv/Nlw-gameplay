@@ -62,5 +62,14 @@ export const styles = StyleSheet.create({
     footer:{
         marginVertical:20,
         marginBottom:56,
+    },
+    CategorySelect:{
+        marginLeft:'20%'
     }
 })
+
+export const Error = `
+display: block;
+color: #c53030;
+margin-top: 7px;
+`

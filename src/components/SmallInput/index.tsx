@@ -1,14 +1,21 @@
 import React from "react";
+import { View } from "react-native";
 import { TextInput,TextInputProps} from "react-native";
 
 import { styles } from './styles'
 
-export function SmallInput({...rest}:TextInputProps) {
+type Props = TextInputProps & {
+    name: string;
+}
+
+export function SmallInput({name,...rest}:Props) {
     return (
-        <TextInput
-            style={styles.container}
-            keyboardType="numeric"
-            {...rest}
-        />
+        <View>
+            <TextInput
+                style={styles.container}
+                keyboardType="numeric"
+                {...rest}
+            />
+        </View>
     )
 }
