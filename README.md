@@ -43,6 +43,8 @@ Nos link abaixo você encontra o layout do projeto web.Precisa ter uma conta no 
 
 ### Requirements
 
+E necessario para criar o seu App no servidor do Discord obter as credencias de autenticação. Em seguida, defina no arquivo .env as configurações do seu App
+
 To run the application you'll need:
 * [Git](https://git-scm.com)
 * [Yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/)
